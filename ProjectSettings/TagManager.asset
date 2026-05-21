@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Player
+  - Enemy
+  - Projectile
+  - MeleeAttack
+  - ParryHitbox
+  - Trap
   layers:
   - Default
   - TransparentFX
@@ -13,13 +19,13 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - PlayerProjectile
+  - EnemyProjectile
+  - Environment
+  - Trap
+  - Interactable
   - 
   - 
   - 
