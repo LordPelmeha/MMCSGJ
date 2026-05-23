@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7362b0b7db4ca14492b3c722b00cd45, type: 3}
+  m_Name: HeadFormConfig
+  m_EditorClassIdentifier: Assembly-CSharp::HalfEmpty.Infrastructure.Configs.FormConfigSO
+  maxHP: 50
+  moveSpeed: 2
+  canJump: 0
+  jumpForce: 12
+  canDash: 0
+  dashDistance: 4
+  dashDuration: 0.15
+  dashCooldown: 1
+  dashInvincible: 1
+  shootDamage: 25
+  shootRate: 0.4
+  projectileSpeed: 15
+  damageMultiplier: 1
+  markDuration: 10
+  maxMarks: 5
+  fullVision: 1
+  innerVisionRadius: 3
+  outerVisionRadius: 5
+  outerVisionAlpha: 0.4

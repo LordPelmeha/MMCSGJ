@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1303c00c93a4cad408239cdcde7e1f8f, type: 3}
+  m_Name: PlayerConfig
+  m_EditorClassIdentifier: Assembly-CSharp::HalfEmpty.Infrastructure.Configs.PlayerConfigSO
+  formSwitchCooldown: 0.5
+  parryWindow: 0.3
+  parryCooldown: 0.5
+  headFormConfig: {fileID: 11400000, guid: a22ed8e39e6a76f4c93d9e3862b21e52, type: 2}
+  bodyFormConfig: {fileID: 11400000, guid: ad2ab462d861356409033b09f2f44509, type: 2}
