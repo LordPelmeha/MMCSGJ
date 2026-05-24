@@ -49,7 +49,7 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
-
+*.mcp_auth_token
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
