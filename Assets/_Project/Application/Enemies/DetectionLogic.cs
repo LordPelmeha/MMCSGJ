@@ -1,8 +1,10 @@
 ﻿#nullable enable
-
 using System;
+using HalfEmpty.Domain.Enums;
 using UnityEngine;
-
+using HalfEmpty.Presentation;
+using HalfEmpty.Application.Enemies.States;
+using HalfEmpty.Application.FSM;
 namespace HalfEmpty.Application.Enemies
 {
     /// <summary>
@@ -28,6 +30,25 @@ namespace HalfEmpty.Application.Enemies
             _range = range;
             _angle = angle;
             _targetMask = targetMask;
+        }
+        /// <summary>
+        /// Call every update. Checks whether the player is within range and cone.
+        /// </summary>
+        /// <param name="playerTransform">The player's transform (found externally).</param>
+        public void UpdateDetection(Transform playerTransform)
+        {
+            if (playerTransform == null) return;
+            float distance = Vector2.Distance(_self.position, playerTransform.position);
+            if (distance > _range) return;
+            // Direction to player
+            Vector2 dirToPlayer = (playerTransform.position - _self.position).normalized;
+            // Cone check — use enemy's forward direction (right in 2D)
+            float dot = Vector2.Dot(dirToPlayer, (Vector2)_self.right);
+            float halfAngleCos = Mathf.Cos(_angle * 0.5f * Mathf.Deg2Rad);
+            if (dot >= halfAngleCos)
+            {
+                OnPlayerDetected?.Invoke(playerTransform);
+            }
         }
     }
 }

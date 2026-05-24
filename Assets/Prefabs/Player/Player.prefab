@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1032882422045750937}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56,7 +56,7 @@ Transform:
   m_GameObject: {fileID: 1367403438840538236}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.25, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -143,7 +143,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 9591a5036935c16418a1afaabb72c158, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -151,7 +151,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
 --- !u!1 &6324205613177626373
 GameObject:
@@ -180,7 +180,7 @@ Transform:
   m_GameObject: {fileID: 6324205613177626373}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -220,8 +220,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 1}
+  m_Offset: {x: -0.097329974, y: 0.038236797}
+  m_Size: {x: 0.7502774, y: 1.1506299}
   m_Direction: 0
 --- !u!114 &6287893968955277642
 MonoBehaviour:
@@ -255,9 +255,9 @@ GameObject:
   - component: {fileID: 5612772560260243778}
   - component: {fileID: 8950925398942494558}
   - component: {fileID: 533654342761746259}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -384,21 +384,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 336633ffb4da8dd4bb11641f3e1f95b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HalfEmpty.Infrastructure.Input.UnityInputProvider
-  _moveAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  _lookAction: {fileID: -5630151704836100654, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  _shootAction: {fileID: 1120369429361536294, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  _parryAction: {fileID: 7766008108438586741, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  _markAction: {fileID: 6667032322431064092, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  _switchFormAction: {fileID: 8462501433894060310, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  _pauseAction: {fileID: -9078367456195074359, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  _jumpAction: {fileID: -2099379676528639254, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  _dashAction: {fileID: 266043362915089878, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  _moveAction: {fileID: -6605942819376154498, guid: 1c4d03205faad334c8704fe4bf63f725, type: 3}
+  _lookAction: {fileID: 329251970459733501, guid: 1c4d03205faad334c8704fe4bf63f725, type: 3}
+  _shootAction: {fileID: 6207028650917538564, guid: 1c4d03205faad334c8704fe4bf63f725, type: 3}
+  _parryAction: {fileID: 778145183309972777, guid: 1c4d03205faad334c8704fe4bf63f725, type: 3}
+  _markAction: {fileID: -8160857550073758730, guid: 1c4d03205faad334c8704fe4bf63f725, type: 3}
+  _switchFormAction: {fileID: 7412874335848232984, guid: 1c4d03205faad334c8704fe4bf63f725, type: 3}
+  _pauseAction: {fileID: -2047106822653512991, guid: 1c4d03205faad334c8704fe4bf63f725, type: 3}
+  _jumpAction: {fileID: 9021888269836992425, guid: 1c4d03205faad334c8704fe4bf63f725, type: 3}
+  _dashAction: {fileID: -7442164340394899403, guid: 1c4d03205faad334c8704fe4bf63f725, type: 3}
   _fallbackParryKey: 102
   _fallbackMarkKey: 324
-  _fallbackSwitchKey: 306
+  _fallbackSwitchKey: 304
   _fallbackPauseKey: 27
   _fallbackJumpKey: 32
-  _fallbackDashKey: 304
+  _fallbackDashKey: 306
 --- !u!114 &7552227363366585476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,7 +541,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: a7faf8f11d097cc49bb76121e4831c4a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -549,5 +549,5 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0

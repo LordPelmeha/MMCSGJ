@@ -16,7 +16,7 @@ MonoBehaviour:
   moveSpeed: 4
   canJump: 1
   jumpForce: 12
-  canDash: 0
+  canDash: 1
   dashDistance: 4
   dashDuration: 0.15
   dashCooldown: 1

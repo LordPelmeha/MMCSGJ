@@ -19,6 +19,7 @@ public class FogOfWarRenderer : MonoBehaviour
         if (_fogOfWarMaterial != null)
         {
             Graphics.Blit(src, dst, _fogOfWarMaterial);
+        }
     }
-        }    }
+}
 }

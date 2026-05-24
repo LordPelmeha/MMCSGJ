@@ -5,7 +5,6 @@ using HalfEmpty.Infrastructure.Factories;
 using HalfEmpty.Infrastructure.Pools;
 using HalfEmpty.Domain.Enums;
 using UnityEngine;
-using HalfEmpty.Presentation.Player;
 namespace HalfEmpty.Presentation.Enemies {
 /// <summary>
 /// View for a melee enemy. Handles melee hitbox + close-range attack.
@@ -18,12 +17,12 @@ public class MeleeEnemyView : EnemyView
     [SerializeField] private float _meleeHitboxRadius = 1f;
     [SerializeField] private LayerMask _playerLayer;
     private readonly List<Collider2D> _hitResults = new(4);
-    /// <summary>
-    /// Initialise the melee enemy.
-    /// </summary>
-    public void Initialize(EnemyConfigSO config, FormType formType)
-    {
-        base.Initialize(config, formType);
-    }
+     /// <summary>
+     /// Initialise the melee enemy.
+     /// </summary>
+     public new void Initialize(EnemyConfigSO config, FormType formType)
+     {
+         base.Initialize(config, formType);
+     }
 }
 }

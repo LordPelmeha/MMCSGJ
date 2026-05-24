@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using HalfEmpty.Domain.Enums;
 using UnityEngine;
 using HalfEmpty.Application.FSM;
 using HalfEmpty.Presentation.Player;
@@ -9,6 +10,7 @@ namespace HalfEmpty.Application.Player {
 public class BodyFormState : IState
 {
     private readonly PlayerController _controller;
+    private readonly BodyMovementStrategy _strategy = new();
     /// <summary>
     /// Creates a BodyFormState that delegates back to the given controller.
     /// </summary>
@@ -16,9 +18,23 @@ public class BodyFormState : IState
     {
         _controller = controller;
     }
-    public void Enter() { }
+    public void Enter()
+    {
+        _controller.SetForm(FormType.Body);
+        if (_controller.MovementView != null)
+        {
+            _controller.MovementView.SetStrategy(_strategy);
+            var config = _controller.Config;
+            if (config != null && config.bodyFormConfig != null)
+                _controller.MovementView.SetSpeed(config.bodyFormConfig.moveSpeed);
+        }
+    }
     public void Exit() { }
     public void Update() { }
-    public void FixedUpdate() { }
+    public void FixedUpdate()
+    {
+        if (_controller.InputProvider != null && _controller.MovementView != null)
+            _controller.MovementView.FixedUpdate(_controller.InputProvider.HorizontalAxis);
+    }
 }
 }

@@ -528,9 +528,9 @@ Assets → Recompile All Scripts
 Иногда In-Process компилятор Unity может перезаписать изменения в файлах C# сразу после сохранения. Это происходит когда:
 
 - Файл открыт одновременно редактором и в скриптовом редакторе
--Unity перекомпилирует и перезагружает домен приложения
+- Unity перекомпилирует и перезагружает домен приложения
 
-**Решение**: после внесения изменений в C# файл всегда сделайте **Assets → Recompile All Scripts** и проверьте консоль. `ForceRecompileAll.sh` не включен в репозиторий — используйте стандартную перезагрузку Unity.
+**Решение**: после внесения изменений в C# файл всегда сделайте **Assets → Recompile All Scripts** и проверьте консоль. `forceRecompileAll.sh` не включен в репозиторий — используйте стандартную перезагрузку Unity.
 
 ### 13.2 Дублирование namespace в `HalfEmpty.Presentation.Enemies`
 
@@ -542,7 +542,7 @@ Assets → Recompile All Scripts
 
 ### 13.3 Отсутствующие классы (MarkManager и т.д.)
 
-Некоторые классы являются заглушками и не имеют полной реализации. При необходимости реализовать sought в отдельном файле совпадающем по namespace.
+Некоторые классы являются заглушками и не имеют полной implementations. При необходимости реализовать sought в отдельном файле совпадающем по namespace.
 
 ### 13.4 Input System Actions.cs — стаб
 
@@ -551,6 +551,158 @@ Assets → Recompile All Scripts
 ### 13.5 End-of-line (EOL) конфликты
 
 Все `.cs` файлы в проекте используют `\r\n` (CRLF) для совместимости с Unity 6.x Burst Compiler. Не пересохраняйте файлы с EOL = `\n` (LF), это вызывает `CS1513: } expected` из-за некорректного парсинга промежуточного контента.
+
+### 13.6 ⚠️ Fallback-клавиши перепутаны в инспекторе UnityInputProvider
+
+В коде `UnityInputProvider.cs` дефолты указаны правильно:
+```csharp
+_fallbackSwitchKey = KeyCode.LeftShift   // Shift для переключения формы
+_fallbackDashKey    = KeyCode.LeftControl // LCtrl для рывка
+```
+
+Но Unity сериализует поля с перепутанными значениями: в инспекторе поля `Fallback Switch Key` и `Fallback Dash Key` имеют противоположные значения (LeftControl и LeftShift соответственно).
+
+**Исправление**: Выделите компонент `UnityInputProvider` на объекте `Player` в инспекторе и исправьте:
+- **Fallback Switch Key** → `Left Shift`
+- **Fallback Dash Key** → `Left Control`
+
+Это влияет только на fallback-режим (когда Input System Actions не сгенерированы). Если Input System генерирован нормально — основной ввод работает, но исправить всё равно рекомендуется.
+
+### 13.7 ⚠️ Игрок не двигается — причины и исправления
+
+#### Причина 1: Fallback-клавиши перепутаны
+
+См. пункт 13.6. Если Input System Actions не сгенерирован, `HorizontalAxis` возвращает `0f` через fallback, и игрок не двигается. Если Input System генерирован — проверьте что action `Move` разрешён (`action.enabled == true`) и в绑定点 назначены клавиши A/D.
+
+#### Причина 2: `_formStateMachine` не инициализирован
+
+`PlayerController` не создаёт `StateMachine` в `Awake()`. Исправление добавлено в код:
+```csharp
+// в PlayerController.Awake():
+_formStateMachine = new StateMachine();
+_formStateMachine.ChangeState(new BodyFormState(this)); // или HeadFormState
+```
+
+Если не добавлена вручную, добавьте в `PlayerController.Awake()` после инициализации movement:
+```csharp
+_formStateMachine = new StateEmpty.Application.FSM.StateMachine new());
+_formStateMachine.ChangeState(new BodyFormState(this));
+```
+
+#### Причина 3: `FixedUpdate()` не вызывает стейт-машину
+
+Исправлено в коде — добавлены:
+```csharp
+private void Update()      { _formStateMachine?.Update(); }
+private void FixedUpdate() { _formStateMachine?.FixedUpdate(); }
+```
+
+#### Причина 4: Input System action Map не активирован
+
+После создания `InputSystem_Actions.inputactions` файла проверьте в инспекторе:
+1. На объекте `Player` есть компонент `PlayerInput` (добавлен автоматически Unity при включении Input System)
+2. В `PlayerInput → Actions` выбран правильный Action Map = `Player`
+3. Все binding (Move, Jump, Dash, SwitchForm) назначены на правильные клавиши
+
+#### Причина 5: Отсутствует `GameController` компонент / класс
+
+В проекте **отсутствует** `GameController.cs` (единственный контроллер сцены). Это означает:
+- Сцена не знает когда запускать/останавливать `GameFlowSM`
+- `Pause` не переключает `_formStateMachine` между `PlayingState` и `PausedState`
+- `GameOver` не показывается при смерти игрока
+
+Создайте `Assets/_Project/Application/Game/GameController.cs` с базовой логикой, или добавьте эту логику в `GameManager`.
+
+---
+
+## 15. Аудит после настройки — что осталось сделать
+
+Этот раздел составлен по итогам сканирования сцены и скриптов MCP-сервером. Пункты отсортированы по приоритету.
+
+### 15.1 🔴 Критические недонастройки в инспекторе (блокируют геймплей)
+
+#### ① Fallback-ключи перепутаны в `UnityInputProvider`
+
+**Файл:** `Player → UnityInputProvider (component)`
+
+Сейчас в инспекторе:
+| Поле | Неправильное значение | Правильное значение |
+|---|---|---|
+| `Fallback Switch Key` | `Left Control` | **`Left Shift`** |
+| `Fallback Dash Key` | `Left Shift` | **`Left Control`** |
+
+Пока не исправлено:
+- Смена формы срабатывает поwrong клавише
+- Рывок срабатывает поwrong клавише
+- Если Input System Actions не сгенерирован — игрок не может двигаться (см. пункт 13.7)
+
+#### ② Отсутствует `CursorMarker` в сцене
+
+**Файл:** `MarkView → Cursor Marker Prefab`
+
+`MarkView` на объекте `Player` ссылается на `CursorMarker` по пути `CursorMarker`, но в иерархии сцены такого объекта **нет**. При нажатии ПКМ в форме «Голова» будет падение с `NullReferenceException`.
+
+Создайте как в разделе 14.4 SETUP.md:  
+`Player → CursorMarker` → пустой GameObject + `SpriteRenderer` (спрайт красного круга) + сохраните как префаб.
+
+#### ③ `PlayerMovementView` не является `MonoBehaviour` и не виден в инспекторе как отдельный компонент
+
+**Файл:** `Presentation/Player/PlayerMovementView.cs`
+
+Сейчас `PlayerMovementView` — это обычный C# класс (POCO). В инспекторе `Player` он показывается как ссылочное поле `Movement View` внутри `PlayerController`, но не как отдельный компонент. В коде добавлен метод `Setup()` и `FixedUpdate(float)`, инициализация происходит в `PlayerController.Awake()`:
+
+```csharp
+_movementView.Setup(_rb, _groundCheck, _groundCheckRadius, _environmentLayer);
+_formStateMachine = new StateMachine();
+_formStateMachine.ChangeState(new BodyFormState(this));
+```
+
+После входа в `BodyFormState.Enter()` вызывается:
+```csharp
+_controller.MovementView.SetStrategy(new BodyMovementStrategy());
+_controller.MovementView.SetSpeed(config.bodyFormConfig.moveSpeed);
+```
+
+При запуске игры `PlayerController.FixedUpdate()` → `_formStateMachine.FixedUpdate()` → `BodyFormState.FixedUpdate()` → `PlayerMovementView.FixedUpdate(horizontalInput)` → `BodyMovementStrategy.Move(rb, direction, speed)`.
+
+Если `CursorMarker`, `PlayerMovementView` и `PlayerAnimationView` должны быть отдельными компонентами с логикой в них самих — их нужно переделать в `MonoBehaviour` и вынести из `PlayerController` как отдельные GameObjects. Сейчас вся логика прокидывается через состояния, что работает, но загромождает `PlayerController`.
+
+### 15.2 🔴 Геймплейные функции, не реализованные в коде
+
+| Компонент | Что не работает | Приоритет |
+|---|---|---|
+| `EnemyAttackState` | `_enemy` и `_playerTransform` передаются в конструкторе, но сам атака не реализована | 🔴 |
+| `EnemyShootState` | Тоже не реализована логика спавна снаряда | 🔴 |
+| `PauseMenuView` | Сейчас `PauseGame()` и `ResumeGame()` — пустые методы | 🔴 |
+| `GameOverState` | `Enter()` — пустой | 🔴 |
+| `ProjectilePool.Return()` | Нет метода возврата снаряда в пул | 🟡 |
+| `ProjectileFactory.Create()` | Создание снаряда не реализовано | 🟡 |
+| `EnemyFactory.CreateEnemy()` | Создание врага не реализовано | 🟡 |
+| `CameraController` | Следование за игроком, курсор-параллакс не реализованы | 🟡 |
+| `VisionController` | Переключение между полной/ограниченной видимостью не реализовано | 🟡 |
+| `MarkView` | Размещение метки под курсором, отслеживание количества | 🟡 |
+| `GameManager` | Подписка на `_onPlayerDeath`, загрузка сцен по Game Flow | 🟡 |
+
+### 15.3 🟡 Орphaned объекты в сцене (можно удалить)
+
+| Объект | Проблема | Что нужно |
+|---|---|---|
+| `Square` | Полностью пустой GameObject без компонентов, не используется | Удалить из `Main.unity` |
+| `Parallax background` | Полностью пустой GameObject, только Transform | Добавить `SpriteRenderer` с спрайтом фона, настроить parallax offset в `CameraController` |
+| `GameFlowSM` | POCO-объект без собственного MonoBehaviour-компонента | Оставить как есть — это DTO-обёртка, которая заполняется из `GameManager`/`GameController` в коде |
+
+### 15.4 🟢 Визуальные/ассетные недостатки
+
+| Недостаток | Что нужно |
+|---|---|
+| Нет тайлмапа уровня | Создать в `Assets/Art/Tilemaps/`, нарисовать в Tiled или Unity Tile Palette |
+| Нет спрайтов игрока | Спрайты для HeadPart и BodyPart (idle, run, jump, shoot, parry, death) |
+| Нет спрайтов врагов | MeleeEnemy (idle, run, attack, death) и RangedEnemy (idle, shoot, death) |
+| Нет спрайтов снарядов | PlayerProjectile и EnemyProjectile |
+| Нет HUD Canvas | Создать `Canvas` → `HUD` → подчинённые элементы: HP Bar (x2), Form Indicator, Cooldowns, Mark Counter |
+| Main Camera нет `CameraController` | Добавить компонент `CameraController` с ссылкой на `CameraConfig.asset` и на `Player` трансформ |
+| Нет звуковых эффектов | SFX для выстрела, парирования, урона, смерти, переключения формы |
+| Нет тумана войны (Fog of War) | Создать шейдер `Assets/Shaders/FogOfWar.shader`, материал `Assets/Materials/Vision/FogOfWarMaterial.mat`, добавить на `VisionController` |
 
 ---
 
@@ -562,7 +714,13 @@ Assets → Recompile All Scripts
 - [ ] Input System Actions создан и сгенерирован
 - [ ] Layers и Tags добавлены в проект
 - [ ] Physics 2D Collision Matrix настроен (или скрипт `PhysicsLayerCollisionSetup.cs` запущен)
-- [ ] Сцена `Level_01.unity` создана в `Assets/Scenes/`
-- [ ] Префабы Player/Enemies/Projectiles созданы в `Assets/Prefabs/`
-- [ ] Консоль Unity не показывает ошибок CS0XXX/CS1XXX/CS2XXX
-- [ ] Уровень добавлен в **File → Build Settings → Scenes In Build**
+- [ ] Fallback-ключи в `UnityInputProvider` исправлены (Switch=LeftShift, Dash=LeftControl)
+- [ ] `CursorMarker` создан в сцене и назначен в `MarkView._cursorMarkerPrefab`
+- [ ] `Main Camera` имеет компонент `CameraController` с назначенным `CameraConfig.asset` и ссылкой на Player
+- [ ] Объект `Square` удалён из сцены
+- [ ] `Assets/Scenes/Main.unity` добавлен в **File → Build Settings → Scenes In Build**
+- [ ] `PlayerController.FixedUpdate()` вызывает `_formStateMachine.FixedUpdate()` ✅ исправлено
+- [ ] `PlayerMovementView` инициализируется через `Setup()` в `Awake()` ✅ исправлено
+- [ ] `BodyFormState` / `HeadFormState` инициализируются через `ChangeState()` при старте ✅ исправлено
+- [ ] `GameFlowSM` в коде имеет метод `Initialise()` для получения `GameStateMachine` ✅ исправлено
+- [ ] Консоль Unity не показывает ошибок CS0XXX/CS1XXX/CS2XXX ✅ исправлено

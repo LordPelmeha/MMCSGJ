@@ -1,9 +1,12 @@
 ﻿#nullable enable
-using InputSystem_ActionsNamespace;
 using HalfEmpty.Infrastructure.Configs;
 using HalfEmpty.Infrastructure.Events;
+using HalfEmpty.Infrastructure.Input;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using HalfEmpty.Application.FSM;
+using HalfEmpty.Application.Game;
+using HalfEmpty.Presentation.Game;
 namespace HalfEmpty.Presentation.UI
 {
 /// <summary>
@@ -11,20 +14,54 @@ namespace HalfEmpty.Presentation.UI
 /// </summary>
 public class PauseMenuView : MonoBehaviour
 {
-    [Header("Config")]
-    [SerializeField] private InputSystem_Actions? _inputActions;
+    [Header("Input")]
+    [SerializeField] private IInputProvider? _inputProvider;
     private bool _isPaused;
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
     private void Update()
     {
-        if (_inputActions != null)
+        // Pause only from PlayingState
+        if (_inputProvider != null && _inputProvider.PausePressed)
         {
-            if (_inputActions.Player.Pause.triggered && _isPaused)
+            if (_isPaused)
                 ResumeGame();
-            else if (_inputActions.Player.Pause.triggered && !_isPaused)
+            else
                 PauseGame();
         }
     }
-    private void PauseGame() { }
-    private void ResumeGame() { }
+    /// <summary>Called by the Resume button.</summary>
+    public void OnResumeButton()
+    {
+        ResumeGame();
+    }
+    /// <summary>Called by the Restart button.</summary>
+    public void OnRestartButton()
+    {
+        ResumeGame();
+        var gm = FindObjectOfType<HalfEmpty.Presentation.GameManager>();
+        gm?.RestartGame();
+    }
+    /// <summary>Called by the Quit to Menu button.</summary>
+    public void OnQuitButton()
+    {
+        ResumeGame();
+        var gm = FindObjectOfType<HalfEmpty.Presentation.GameManager>();
+        gm?.QuitToMenu();
+    }
+    private void PauseGame()
+    {
+        _isPaused = true;
+        Time.timeScale = 0f;
+        gameObject.SetActive(true);
+    }
+    private void ResumeGame()
+    {
+        _isPaused = false;
+        Time.timeScale = 1f;
+        gameObject.SetActive(false);
+    }
 }
 }
