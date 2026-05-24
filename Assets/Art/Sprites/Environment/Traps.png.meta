@@ -1,10 +1,34 @@
 fileFormatVersion: 2
-guid: 442a4e5b5769be642aac9cbb26bfa50f
+guid: 48803a2faa59cec4e9cf0618ca76951b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4273549291679567678
-    second: Fon_0
+      213: 8461420503668631102
+    second: Traps_0
+  - first:
+      213: 6290968146768072676
+    second: Traps_1
+  - first:
+      213: -3814210614920083960
+    second: Traps_2
+  - first:
+      213: -6249010372859577160
+    second: Traps_3
+  - first:
+      213: 5453249778156335981
+    second: Traps_4
+  - first:
+      213: 7782697485915144779
+    second: Traps_5
+  - first:
+      213: 5735738129519079201
+    second: Traps_6
+  - first:
+      213: 1703483391819764378
+    second: Traps_7
+  - first:
+      213: 5958270868783894255
+    second: Traps_8
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,12 +70,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -96,40 +120,71 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fon_0
+      name: Traps_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 200
-        height: 200
+        width: 64
+        height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e3fcea44072be4b30800000000000000
-      internalID: 4273549291679567678
+      spriteID: e3620681e110d6570800000000000000
+      internalID: 8461420503668631102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Traps_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ef8861d2320e4750800000000000000
+      internalID: 6290968146768072676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Traps_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8060a2f77a3311bc0800000000000000
+      internalID: -3814210614920083960
       vertices: []
       indices: 
       edges: []
@@ -138,7 +193,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 97802947dbd0c954eafe3b540768810c
     internalID: 0
     vertices: []
     indices: 
@@ -146,9 +201,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Fon_0: 4273549291679567678
+      Traps_0: 8461420503668631102
+      Traps_1: 6290968146768072676
+      Traps_2: -3814210614920083960
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
