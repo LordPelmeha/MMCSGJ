@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 531041499651332351}
   - component: {fileID: 5239418239526109408}
   - component: {fileID: 2984211170463825811}
+  - component: {fileID: -7206820936130508434}
   m_Layer: 10
   m_Name: PlayerProjectile
   m_TagString: Projectile
@@ -171,3 +172,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HalfEmpty.Presentation.Combat.ProjectileView
   _debugCollision: 0
+--- !u!95 &-7206820936130508434
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2212424252651424432}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 32a15bb82782ce241a470c21452af824, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
