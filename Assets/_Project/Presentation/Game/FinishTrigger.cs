@@ -1,35 +1,38 @@
-#nullable enable
-using HalfEmpty.Domain.Enums;
-using HalfEmpty.Infrastructure.Events;
-using UnityEngine;
+  #nullable enable
+  using HalfEmpty.Application.Game;
+  using HalfEmpty.Presentation.UI;
+  using UnityEngine;
+  namespace HalfEmpty.Presentation.Game
+  {
+  /// <summary>
+  /// Game finish trigger: when the player enters this zone, the game switches
+  /// to CreditsState (shows "Спасибо, что играли").
+  /// </summary>
+  public class FinishTrigger : MonoBehaviour
+  {
+      [Header("Settings")]
+      [SerializeField] private bool _debugLog = true;
 
-namespace HalfEmpty.Presentation.Game
-{
-    /// <summary>
-    /// Game finish trigger: Ends the game when player reaches designated trigger object.
-    /// </summary>
-    public class FinishTrigger : MonoBehaviour
-    {
-        [Header("Settings")]
-        [SerializeField] private VoidEventSO _onGameFinish;
-        [SerializeField] private bool _debugLog = true;
-        
-        private bool _triggerActivated = false;
-        
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if ((other.CompareTag("Player") || other.CompareTag("Enemy")) && !_triggerActivated)
-            {
-                Debug.Log($"[FinishTrigger] Game finished via trigger: {gameObject.name}");
-                _onGameFinish?.Raise();
-                
-                // Prevent multiple triggers from same object
-                _triggerActivated = true;
-            }
-            else if (_debugLog)
-            {
-                Debug.Log($"[FinishTrigger] Ignoring non-player/trigger: {other.name}");
-            }
-        }
-    }
-}
+      private bool _triggered;
+
+      private void OnTriggerEnter2D(Collider2D other)
+      {
+          if (_triggered) return;
+          if (!other.CompareTag("Player")) return;
+
+          _triggered = true;
+          if (_debugLog) Debug.Log("[FinishTrigger] Player reached the end — switching to CreditsState.");
+
+          // Find GameFlowController in the scene and switch state
+          var controller = Object.FindFirstObjectByType<HalfEmpty.Presentation.Game.GameFlowController>();
+          if (controller != null)
+          {
+              controller.ChangeState(new CreditsState());
+          }
+          else
+          {
+              Debug.LogWarning("[FinishTrigger] GameFlowController not found in scene!");
+          }
+      }
+  }
+  }

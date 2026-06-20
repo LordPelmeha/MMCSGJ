@@ -15,6 +15,7 @@
   public class PlayingState : IState
   {
       private GameFlowSM? _gameFlowSM;
+      private VoidEventSO? _onGameFinish;
       public void Enter()
       {
           Time.timeScale = 1f;
@@ -22,6 +23,11 @@
           if (controller != null)
           {
               _gameFlowSM = controller.GameFlowSMRef;
+          }
+          _onGameFinish = Resources.Load<VoidEventSO>("Configs/Events/OnGameFinish");
+          if (_onGameFinish != null)
+          {
+              _onGameFinish.Register(HandleGameFinish);
           }
           var hud = Object.FindFirstObjectByType<HUDView>();
           if (hud != null) hud.gameObject.SetActive(true);
@@ -37,8 +43,13 @@
       public void Exit()
       {
           Time.timeScale = 1f;
+          _onGameFinish?.Unregister(HandleGameFinish);
           var hud = Object.FindFirstObjectByType<HUDView>();
           if (hud != null) hud.gameObject.SetActive(false);
       }
+      private void HandleGameFinish()
+      {
+          _gameFlowSM?.ChangeState(new CreditsState());
+      }
   }
-  }
+}
