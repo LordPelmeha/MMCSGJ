@@ -27,8 +27,6 @@ public class EnemyDeathState : IState
     {
         if (_entered) return;
         _entered = true;
-        _enemy.OnDied += HandleDied;
-        // Fire the event immediately (or let the caller have already fired it)
         HandleDied();
     }
     public void Exit() { }

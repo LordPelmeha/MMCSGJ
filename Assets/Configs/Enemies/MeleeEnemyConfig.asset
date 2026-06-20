@@ -12,14 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6947ec777114d4241b546d73433ef4b4, type: 3}
   m_Name: MeleeEnemyConfig
   m_EditorClassIdentifier: Assembly-CSharp::HalfEmpty.Infrastructure.Configs.EnemyConfigSO
+  enemyType: 0
   hp: 50
   moveSpeed: 4
   detectionRange: 10
   detectionAngle: 180
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
   attackDamage: 20
   attackRange: 1.5
   attackCooldown: 1
   projectileSpeed: 10
   fireRate: 1.5
-  projectilePrefab: {fileID: 0}
+  projectileConfig: {fileID: 0}
   canBeParried: 1

@@ -19,5 +19,7 @@ public class RangedEnemyView : EnemyView
     {
         _projectileFactory = factory;
     }
+    /// <summary>Get the fire point transform for projectile spawning.</summary>
+    public Transform? GetFirePoint() => _firePoint;
 }
 }

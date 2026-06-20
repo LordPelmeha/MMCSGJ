@@ -28,6 +28,6 @@ MonoBehaviour:
   markDuration: 10
   maxMarks: 5
   fullVision: 0
-  innerVisionRadius: 3
-  outerVisionRadius: 5
+  innerVisionRadius: 1
+  outerVisionRadius: 2
   outerVisionAlpha: 0.4

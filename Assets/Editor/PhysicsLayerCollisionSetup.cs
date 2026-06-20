@@ -85,14 +85,13 @@ public static class PhysicsLayerCollisionSetup
         Physics2D.IgnoreLayerCollision(Layer_Trap,           Layer_Enemy,            true );  // — Enemy ↔ Trap
 
         // ── ParryHitbox / Interactable (15) ─────────────────────────
-        // Per DisDoc Appendix B: ParryHitbox only collides with Enemy layer.
-        // Projectile reflection is handled by tag "ParryHitbox" in ProjectileView
-        // (works across layer boundaries).
+        // ParryHitbox needs to collide with EnemyProj for projectile parry
         Physics2D.IgnoreLayerCollision(Layer_Interactable,  Layer_Player,       true );
         Physics2D.IgnoreLayerCollision(Layer_Interactable,  Layer_PlayerProj,   true );
-        Physics2D.IgnoreLayerCollision(Layer_Interactable,  Layer_EnemyProj,    true );
+        Physics2D.IgnoreLayerCollision(Layer_Interactable,  Layer_EnemyProj,    false); // ✅ ParryHitbox ↔ EnemyProj
         Physics2D.IgnoreLayerCollision(Layer_Interactable,  Layer_Environment,  true );
         Physics2D.IgnoreLayerCollision(Layer_Interactable,  Layer_Trap,         true );
+        Physics2D.IgnoreLayerCollision(Layer_Interactable,  Layer_Enemy,        false); // ✅ ParryHitbox ↔ Enemy
 
         Debug.Log("[PhysicsLayerCollisionSetup] 2D layer collision matrix configured from DisDoc Appendix B.");
     }

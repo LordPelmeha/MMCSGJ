@@ -19,12 +19,14 @@ namespace HalfEmpty.Application.Enemies
         private readonly LayerMask _targetMask;
         /// <summary>Raised when the player enters detection range.</summary>
         public event Action<Transform>? OnPlayerDetected;
-        /// <summary>Initialises the detection component.</summary>
-        /// <param name="self">The enemy's transform.</param>
-        /// <param name="range">Detection distance in world units.</param>
-        /// <param name="angle">Half-angle of the detection cone in degrees. Use 180 for full circle.</param>
-        /// <param name="targetMask">Which layers count as the player.</param>
-        public DetectionLogic(Transform self, float range, float angle, LayerMask targetMask)
+    /// <summary>
+    /// Initialises the detection component.
+    /// </summary>
+    /// <param name="self">The enemy's transform.</param>
+    /// <param name="range">Detection distance in world units.</param>
+    /// <param name="angle">Half-angle of the detection cone in degrees. Use 180 for full circle.</param>
+    /// <param name="targetMask">Which layers count as valid targets (e.g. Player layer).</param>
+    public DetectionLogic(Transform self, float range, float angle, LayerMask targetMask)
         {
             _self = self;
             _range = range;
@@ -32,23 +34,31 @@ namespace HalfEmpty.Application.Enemies
             _targetMask = targetMask;
         }
         /// <summary>
-        /// Call every update. Checks whether the player is within range and cone.
-        /// </summary>
-        /// <param name="playerTransform">The player's transform (found externally).</param>
-        public void UpdateDetection(Transform playerTransform)
+/// Call every update. Checks whether the player is within range and cone.
+/// </summary>
+/// <param name="playerTransform">The player's transform (found externally).</param>
+    public void UpdateDetection(Transform playerTransform)
+    {
+        if (playerTransform == null) return;
+        float distance = Vector2.Distance(_self.position, playerTransform.position);
+        Debug.Log($"[DetectionLogic] dist={distance:F1} range={_range} layerCheck={( ((1 << playerTransform.gameObject.layer) & _targetMask) != 0)} targetMask={_targetMask} playerLayer={playerTransform.gameObject.layer} playerName={playerTransform.name}");
+        if (distance > _range) return;
+        // Layer mask check: only consider objects whose layer is included in the mask
+        if (((1 << playerTransform.gameObject.layer) & _targetMask) == 0) return;
+        // Direction to player
+        Vector2 dirToPlayer = (playerTransform.position - _self.position).normalized;
+        // Cone check — use enemy's forward direction (right in 2D)
+        float dot = Vector2.Dot(dirToPlayer, (Vector2)_self.right);
+        float halfAngleCos = Mathf.Cos(_angle * 0.5f * Mathf.Deg2Rad);
+        if (Mathf.Abs(dot) >= halfAngleCos)
         {
-            if (playerTransform == null) return;
-            float distance = Vector2.Distance(_self.position, playerTransform.position);
-            if (distance > _range) return;
-            // Direction to player
-            Vector2 dirToPlayer = (playerTransform.position - _self.position).normalized;
-            // Cone check — use enemy's forward direction (right in 2D)
-            float dot = Vector2.Dot(dirToPlayer, (Vector2)_self.right);
-            float halfAngleCos = Mathf.Cos(_angle * 0.5f * Mathf.Deg2Rad);
-            if (dot >= halfAngleCos)
-            {
-                OnPlayerDetected?.Invoke(playerTransform);
-            }
+            Debug.Log($"[DetectionLogic] Player DETECTED! dot={dot:F2} halfAngleCos={halfAngleCos:F2}");
+            OnPlayerDetected?.Invoke(playerTransform);
         }
+    }
+/// <summary>True if the player is currently within detection range.</summary>
+public bool IsDetected { get; private set; }
+/// <summary>External hook to set detection state from caller.</summary>
+public void SetDetected(bool value) => IsDetected = value;
     }
 }

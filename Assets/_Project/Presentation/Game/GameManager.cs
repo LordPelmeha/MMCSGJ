@@ -3,6 +3,7 @@ using HalfEmpty.Infrastructure.Events;
 using HalfEmpty.Application;
 using HalfEmpty.Application.FSM;
 using HalfEmpty.Application.Game;
+using HalfEmpty.Presentation.Game;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 namespace HalfEmpty.Presentation
@@ -36,6 +37,13 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.LogWarning("[GameManager] _onPlayerDeath event not assigned.");
+        }
+
+        if (_gameFlowSM == null)
+        {
+            var controller = FindFirstObjectByType<HalfEmpty.Presentation.Game.GameFlowController>();
+            if (controller != null)
+                _gameFlowSM = controller.GameFlowSMRef;
         }
     }
     private void OnDestroy()

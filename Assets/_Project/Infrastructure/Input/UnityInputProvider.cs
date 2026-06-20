@@ -67,7 +67,7 @@ public class UnityInputProvider : MonoBehaviour, IInputProvider
         get
         {
             bool action = DashAction?.triggered ?? false;
-            bool keyboard = _keyboard?.leftShiftKey.wasPressedThisFrame ?? false;
+            bool keyboard = _keyboard?.leftCtrlKey.wasPressedThisFrame ?? false;
             if (action || keyboard) Debug.Log($"[Input] DashPressed! action={action} keyboard={keyboard}");
             return action || keyboard;
         }
@@ -107,7 +107,7 @@ public class UnityInputProvider : MonoBehaviour, IInputProvider
         get
         {
             bool action = SwitchFormAction?.triggered ?? false;
-            bool keyboard = _keyboard?.leftCtrlKey.wasPressedThisFrame ?? false;
+            bool keyboard = _keyboard?.leftShiftKey.wasPressedThisFrame ?? false;
             if (action || keyboard) Debug.Log($"[Input] SwitchFormPressed! action={action} keyboard={keyboard}");
             return action || keyboard;
         }

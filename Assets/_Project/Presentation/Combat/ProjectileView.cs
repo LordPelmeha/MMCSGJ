@@ -79,34 +79,34 @@ public class ProjectileView : MonoBehaviour
     {
         if (_pool == null) return;
 
-        // Check if hit the target layer
-        if ((_targetLayer & (1 << other.gameObject.layer)) != 0)
-        {
-            // Deal damage via HealthData if present
-            var healthData = other.GetComponent<HalfEmpty.Domain.Health.HealthData>();
-            if (healthData != null)
+// Check if hit the target layer
+            if ((_targetLayer & (1 << other.gameObject.layer)) != 0)
             {
-                healthData.TakeDamage(_damage);
-            }
-            else
-            {
-                // Try PlayerHealthView for the player
-                var playerHealth = other.GetComponent<HalfEmpty.Presentation.Player.PlayerHealthView>();
-                if (playerHealth != null)
+                // Deal damage via HealthData if present
+                var enemyView = other.GetComponent<EnemyView>();
+                if (enemyView != null && enemyView.Health != null)
                 {
-                    var hpHolder = other.GetComponent<HalfEmpty.Presentation.Player.PlayerController>();
-                    if (hpHolder != null)
+                    enemyView.Health.TakeDamage(_damage);
+                }
+                else
+                {
+                    // Try PlayerHealthView for the player
+                    var playerHealth = other.GetComponent<HalfEmpty.Presentation.Player.PlayerHealthView>();
+                    if (playerHealth != null)
                     {
-                        var form = hpHolder.CurrentForm;
-                        playerHealth.TakeDamage(form, _damage);
+                        var hpHolder = other.GetComponent<HalfEmpty.Presentation.Player.PlayerController>();
+                        if (hpHolder != null)
+                        {
+                            var form = hpHolder.CurrentForm;
+                            playerHealth.TakeDamage(form, _damage);
+                        }
                     }
                 }
-            }
 
-            if (_debugCollision) Debug.Log($"[ProjectileView] Hit {other.name} on target layer.");
-            _pool.Return(this);
-            return;
-        }
+                if (_debugCollision) Debug.Log($"[ProjectileView] Hit {other.name} on target layer.");
+                _pool.Return(this);
+                return;
+            }
 
         // Hit environment — return to pool
         if (other.CompareTag("Environment"))
@@ -129,6 +129,8 @@ public class ProjectileView : MonoBehaviour
         }
     }
 
+/// <summary>Current target layer for collision detection.</summary>
+    public LayerMask TargetLayer => _targetLayer;
     /// <summary>Called when the projectile is parried (reflected).</summary>
     public void OnParried()
     {
@@ -136,7 +138,10 @@ public class ProjectileView : MonoBehaviour
         _isReflected = true;
         _direction = -_direction;
         _speed *= _reflectedSpeedMultiplier;
-
+        // Flip the target layer when parried - player projectiles target enemy, enemy projectiles target player
+        _targetLayer = _fromEnemy ? LayerMask.GetMask("Player") : LayerMask.GetMask("Enemy");
+        if (_targetLayer == 0)
+            Debug.LogWarning($"[ProjectileView] Reflected projectile targetLayer is 0 — layer '{( _fromEnemy ? "Player" : "Enemy")}' may not exist.");
         if (_rb != null)
         {
             _rb.linearVelocity = _direction * _speed;

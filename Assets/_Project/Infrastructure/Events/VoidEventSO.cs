@@ -17,5 +17,13 @@ public class VoidEventSO : ScriptableObject
     {
         if (_listeners.Contains(listener)) _listeners.Remove(listener);
     }
+    /// <summary>Raise the event to all registered listeners.</summary>
+    public void Raise()
+    {
+        for (int i = _listeners.Count - 1; i >= 0; i--)
+        {
+            _listeners[i]?.Invoke();
+        }
+    }
 }
 }

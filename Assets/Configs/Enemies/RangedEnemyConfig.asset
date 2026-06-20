@@ -12,14 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6947ec777114d4241b546d73433ef4b4, type: 3}
   m_Name: RangedEnemyConfig
   m_EditorClassIdentifier: Assembly-CSharp::HalfEmpty.Infrastructure.Configs.EnemyConfigSO
+  enemyType: 1
   hp: 50
   moveSpeed: 4
   detectionRange: 10
   detectionAngle: 180
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
   attackDamage: 20
   attackRange: 1.5
   attackCooldown: 1
   projectileSpeed: 10
   fireRate: 1.5
-  projectilePrefab: {fileID: 0}
+  projectileConfig: {fileID: 11400000, guid: 9326bd9e580a12a499ee9903cb48a6de, type: 2}
   canBeParried: 1

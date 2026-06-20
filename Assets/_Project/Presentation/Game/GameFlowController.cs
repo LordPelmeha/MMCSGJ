@@ -23,13 +23,11 @@ public class GameFlowController : MonoBehaviour
     private GameStateMachine? _stateMachine;
     private void Start()
     {
-        // Construct the GameFlowSM POCO (it is not a component)
-        _gameFlowSM = new GameFlowSM();
-        // Build the game flow state machine
-        _stateMachine = new GameStateMachine();
+        if (_gameFlowSM == null)
+            _gameFlowSM =new GameFlowSM();
+        _stateMachine =new GameStateMachine();
         _stateMachine.ChangeState(new MenuState());
         _gameFlowSM.Initialise(_stateMachine);
-        // Start playing immediately for Main scene
         _stateMachine.ChangeState(new PlayingState());
     }
     /// <summary>Public accessor for other components to switch game states.</summary>

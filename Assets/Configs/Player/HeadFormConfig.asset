@@ -17,7 +17,7 @@ MonoBehaviour:
   canJump: 0
   jumpForce: 12
   canDash: 0
-  dashDistance: 4
+  dashDistance: 0
   dashDuration: 0.15
   dashCooldown: 1
   dashInvincible: 1
@@ -28,6 +28,6 @@ MonoBehaviour:
   markDuration: 10
   maxMarks: 5
   fullVision: 1
-  innerVisionRadius: 3
-  outerVisionRadius: 5
+  innerVisionRadius: 2
+  outerVisionRadius: 4
   outerVisionAlpha: 0.4

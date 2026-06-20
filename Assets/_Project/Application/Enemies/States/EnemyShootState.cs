@@ -57,15 +57,41 @@
          }
      }
      public void FixedUpdate() { }
-     private void Fire()
-     {
-         if (_projectileFactory == null || _projectileConfig == null) return;
-         Vector2 dir = (_playerTransform.position - _enemy.transform.position).normalized;
-         _projectileFactory.Create(
-             position: _enemy.transform.position,
-             direction: dir,
-             config: _projectileConfig,
-             fromEnemy: true);
-     }
- }
- }
+      private void Fire()
+      {
+          if (_projectileFactory == null)
+          {
+              Debug.LogWarning("[EnemyShootState] _projectileFactory is null!");
+              return;
+          }
+          if (_projectileConfig == null)
+          {
+              Debug.LogWarning("[EnemyShootState] _projectileConfig is null!");
+              return;
+          }
+          if (_playerTransform == null)
+          {
+              Debug.LogWarning("[EnemyShootState] _playerTransform is null!");
+              return;
+          }
+          Vector2 dir = (_playerTransform.position - _enemy.transform.position).normalized;
+          // Try to use fire point from RangedEnemyView, fallback to enemy position
+          Vector2 spawnPos = _enemy.transform.position;
+          var rangedView = _enemy as HalfEmpty.Presentation.Enemies.RangedEnemyView;
+          if (rangedView != null)
+          {
+              var firePoint = rangedView.GetFirePoint();
+              if (firePoint != null)
+              {
+                  spawnPos = firePoint.position;
+              }
+          }
+          Debug.Log($"[EnemyShootState] Firing projectile! pos={spawnPos} dir={dir} config={_projectileConfig.name}");
+          _projectileFactory.Create(
+              position: spawnPos,
+              direction: dir,
+              config: _projectileConfig,
+              fromEnemy: true);
+      }
+  }
+  }

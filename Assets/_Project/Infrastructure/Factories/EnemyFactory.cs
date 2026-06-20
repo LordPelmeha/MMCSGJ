@@ -1,8 +1,9 @@
-﻿ #nullable enable
- using HalfEmpty.Infrastructure.Configs;
- using HalfEmpty.Domain.Enums;
- using UnityEngine;
- namespace HalfEmpty.Infrastructure.Factories {
+﻿  #nullable enable
+  using HalfEmpty.Infrastructure.Configs;
+  using HalfEmpty.Domain.Enums;
+  using HalfEmpty.Presentation;
+  using UnityEngine;
+  namespace HalfEmpty.Infrastructure.Factories {
  /// <summary>
  /// Creates and configures enemy GameObjects from a prefab and an EnemyConfigSO.
  /// </summary>
@@ -22,8 +23,7 @@
      public GameObject CreateEnemy(Vector3 position, EnemyConfigSO config, FormType formType = FormType.Body)
      {
          var enemy = Object.Instantiate(_prefab, position, Quaternion.identity);
-         var view = enemy.GetComponent<Presentation.Player.PlayerController>();
-         var enemyView = enemy.GetComponent<Presentation.EnemyView>();
+          var enemyView = enemy.GetComponent<EnemyView>();
          if (enemyView != null)
          {
              enemyView.Initialize(config, formType);

@@ -3,6 +3,7 @@ using System;
 using HalfEmpty.Infrastructure.Configs;
 using HalfEmpty.Infrastructure.Events;
 using HalfEmpty.Domain.Enums;
+using HalfEmpty.Domain.Health;
 using UnityEngine;
 namespace HalfEmpty.Presentation
 {
@@ -12,7 +13,7 @@ namespace HalfEmpty.Presentation
 public class EnemyView : MonoBehaviour
 {
     protected EnemyConfigSO? _config;
-    protected HalfEmpty.Domain.Health.HealthData? _healthData;
+    protected HealthData? _healthData;
     protected Application.Enemies.States.EnemyDeathState? _deathState;
     private FormType _formType = FormType.Body;
     private bool _isDead;
@@ -27,7 +28,7 @@ public class EnemyView : MonoBehaviour
         _formType = formType;
         if (config != null)
         {
-            _healthData = new HalfEmpty.Domain.Health.HealthData(config.hp);
+            _healthData = new HealthData(config.hp);
             _healthData.OnDied += HandleDeath;
             _healthData.OnHealthChanged += (cur, max) => { };
         }
@@ -40,5 +41,9 @@ public class EnemyView : MonoBehaviour
         OnDied?.Invoke();
         _isDead = true;
     }
+    /// <summary>
+    /// Current health data for this enemy.
+    /// </summary>
+    public HealthData? Health => _healthData;
 }
 }

@@ -14,5 +14,10 @@ public class PlayerVisionView
     {
         _visionController = visionController;
     }
+    public void SetForm(FormType form)
+    {
+        if (_visionController != null)
+            _visionController.SetForm(form);
+    }
 }
 }

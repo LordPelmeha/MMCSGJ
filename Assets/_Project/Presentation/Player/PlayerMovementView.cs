@@ -9,12 +9,18 @@ public class PlayerMovementView
 {
     private IMovementStrategy _strategy = null!;
     private Rigidbody2D? _rb;
+    private Transform? _groundCheck;
+    private float _groundCheckRadius;
+    private LayerMask _groundLayer;
     private float _speed;
     private bool _dashing;
     /// <summary>Inject Rigidbody2D and ground-check settings from PlayerController.</summary>
     public void Setup(Rigidbody2D rb, Transform? groundCheck, float groundCheckRadius, LayerMask groundLayer)
     {
         _rb = rb;
+        _groundCheck = groundCheck;
+        _groundCheckRadius = groundCheckRadius;
+        _groundLayer = groundLayer;
     }
     /// <summary>Swap the active movement strategy (called on form change).</summary>
     public void SetStrategy(IMovementStrategy strategy)
@@ -35,6 +41,16 @@ public class PlayerMovementView
     public bool IsDashing => _dashing;
     /// <summary>Current active strategy.</summary>
     public IMovementStrategy? GetStrategy() => _strategy;
+    /// <summary>True when the player is standing on the ground (checked via OverlapCircle at groundCheck).</summary>
+    public bool IsGrounded
+    {
+        get
+        {
+            if (_groundCheck == null) return true;
+            var hit = Physics2D.OverlapCircle(_groundCheck.position, _groundCheckRadius, _groundLayer);
+            return hit != null;
+        }
+    }
     /// <summary>
     /// Apply movement. Called every FixedUpdate from BodyFormState.
     /// Skips X-axis movement while dashing so the dash is not overwritten.

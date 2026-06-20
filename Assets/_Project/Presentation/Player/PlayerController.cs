@@ -228,8 +228,15 @@ namespace HalfEmpty.Presentation.Player
                     var strategy = _movementView?.GetStrategy();
                     if (strategy != null && strategy.CanJump)
                     {
-                        strategy.Jump(_rb, activeConfig.jumpForce);
-                        _animator?.SetTrigger(JumpTriggerHash);
+                        if (_movementView.IsGrounded)
+                        {
+                            strategy.Jump(_rb, activeConfig.jumpForce);
+                            _animator?.SetTrigger(JumpTriggerHash);
+                        }
+                        else
+                        {
+                            Debug.Log("[PlayerController] Jump blocked — not grounded");
+                        }
                     }
                 }
             }
@@ -253,9 +260,9 @@ namespace HalfEmpty.Presentation.Player
 
             if (_inputProvider.ShootPressed && _combatView != null)
             {
-                var bodyConfig = BodyConfig;
-                if (bodyConfig != null)
-                    _combatView.HandleShoot(_inputProvider, bodyConfig);
+                var activeConfig = ActiveFormConfig;
+                if (activeConfig != null)
+                    _combatView.HandleShoot(_inputProvider, activeConfig);
             }
 
             if (_inputProvider.ParryPressed && _combatView != null)
@@ -409,6 +416,8 @@ namespace HalfEmpty.Presentation.Player
             }
 
             _combatView?.SetForm(newForm);
+
+            _visionView?.SetForm(newForm);
 
             var newState = newForm == FormType.Body
                 ? (IState)new BodyFormState(this)

@@ -47,15 +47,26 @@
          if (_parryCollider != null)
              _parryCollider.enabled = false;
      }
-     private IEnumerator HitboxWindowRoutine(float duration)
-     {
-         yield return new WaitForSeconds(duration);
-         _isActive = false;
-         if (_parryCollider != null)
-             _parryCollider.enabled = false;
-         _activeWindowCoroutine = null;
-     }
-     /// <summary>True while the parry window is active.</summary>
-     public bool IsActive => _isActive;
- }
+private IEnumerator HitboxWindowRoutine(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        _isActive = false;
+        if (_parryCollider != null)
+            _parryCollider.enabled = false;
+        _activeWindowCoroutine = null;
+    }
+    /// <summary>True while the parry window is active.</summary>
+    public bool IsActive => _isActive;
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!_isActive) return;
+        // Check for projectiles to parry
+        var projectile = other.GetComponent<HalfEmpty.Presentation.Combat.ProjectileView>();
+        if (projectile != null)
+        {
+            projectile.OnParried();
+            DeactivateHitbox();
+        }
+    }
+}
  }

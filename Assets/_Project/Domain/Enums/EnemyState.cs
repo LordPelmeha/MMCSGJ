@@ -12,4 +12,12 @@ public enum EnemyState
     Shoot = 3,
     Death = 4
 }
+/// <summary>
+/// Type of enemy for determining behavior.
+/// </summary>
+public enum EnemyType
+{
+    Melee = 0,
+    Ranged = 1
+}
 }
