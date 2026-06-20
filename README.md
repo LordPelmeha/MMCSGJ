@@ -5,9 +5,8 @@
 - **Unity**: `6000.3.14f1` (URP 2D)
 - **Язык**: C# 9.0 / `netstandard2.1`
 - **Архитектура**: Clean Architecture (Domain → Application → Infrastructure → Presentation)
-
+- Страница игры с гейм джема - https://jammer.website/ru/games/11?jam_id=3
 ---
-
 ## Игровой процесс
 
 | Действие | Клавиша | Голова | Тело |
